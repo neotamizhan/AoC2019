@@ -1,11 +1,12 @@
 using System;
 using System.Text.RegularExpressions;
-
+using System.Collections.Generic;
+using System.Linq;
 namespace AdventOfCode
 {
   public class Day4
   {
-    static bool isTidy(int num) 
+    static bool areDigitsAscending(int num) 
     { 
         // To store previous digit (Assigning 
         // initial value which is more than any 
@@ -14,7 +15,7 @@ namespace AdventOfCode
       
         // Traverse all digits from right to 
         // left and check if any digit is 
-        // smaller than previous. 
+        // smaller than or equal to previous. 
         while (num > 0) 
         { 
             int rem = num % 10; 
@@ -27,14 +28,14 @@ namespace AdventOfCode
         return true; 
     } 
     
-    static bool hasRepeatingDigits(int num) 
+    static bool hasRepeatingDigits(int num, bool ensureDouble) 
     { 
         // To store previous digit (Assigning 
         // initial value which is more than any 
         // digit) 
         int prev = 10; 
-        repeatedNum = 0;
-        bool moreThanTwice = false; 
+        int repeatedNum = 0;
+        Dictionary<int,int> counter = new Dictionary<int,int>();
         // Traverse all digits from right to 
         // left and check if any digit is 
         // smaller than previous. 
@@ -44,23 +45,23 @@ namespace AdventOfCode
             num /= 10; 
             if (rem == prev)
             { 
-              if (moreThanTwice) {
-                
+              if (!counter.ContainsKey(rem)) {
+                counter[rem] = 1;
               }
-              return true; 
+              counter[rem]++;
             }
             prev = rem; 
         } 
       
-        return false; 
+        return counter.Where(c=>c.Value == 2).Count() > 0;; 
     } 
 
     public static bool CanBePassword(int lower, int upper, int number) 
     {
       return 
         (number >= lower && number <= upper) &&
-        hasRepeatingDigits(number) &&
-        isTidy(number);
+        hasRepeatingDigits(number, true) &&
+        areDigitsAscending(number);
     }    
 
     public static void Process() {

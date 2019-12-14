@@ -30,6 +30,8 @@ namespace AdventOfCode {
           case 2:
             intStream[outputPos] = intStream[param1] * intStream[param2];  
             break;
+          case 3:
+            break;
           case 99:
             endOfStream = true;
             break;            
